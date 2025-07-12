@@ -1,7 +1,8 @@
 // file: main.dart
 import 'package:flutter/material.dart';
 import 'package:progresshelp/gradient_background.dart';
-import 'category_page.dart';
+import 'package:progresshelp/program_carousel_page.dart';
+import 'package:progresshelp/category_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       //theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
       home: GradientBackground(
-        child: CategoryPage(),
+        child: ProgramCarouselPage(),
       ),
     );
   }

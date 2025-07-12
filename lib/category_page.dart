@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:progresshelp/gradient_background.dart';
 import 'question_page.dart';
 
-
 class CategoryPage extends StatelessWidget {
-  CategoryPage({super.key});
+  final String selectedProgram;
+  CategoryPage({super.key, required this.selectedProgram});
   final List<String> categories = [
     'Nuova voce presenze',
     'Modifica cartellino',
@@ -20,7 +20,10 @@ class CategoryPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('Scegli la categoria', style:  TextStyle(color: Colors.white)),
+          title: Text(
+            'Categorie - $selectedProgram',
+            style: TextStyle(color: Colors.white),
+          ),
           backgroundColor: Colors.transparent,
         ),
         body: ListView.builder(
@@ -28,10 +31,13 @@ class CategoryPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final category = categories[index];
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
               child: Card(
                 color: Colors.white.withAlpha(5), // <-- trasparenza!
-  elevation: 4,
+                elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
@@ -40,9 +46,16 @@ class CategoryPage extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(16.0),
                   title: Text(
                     category,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500,    color: Colors.white,),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
-                  trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                  trailing: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
