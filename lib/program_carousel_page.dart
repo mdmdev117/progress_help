@@ -35,6 +35,8 @@ class _ProgramCarouselPageState extends State<ProgramCarouselPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.white,
+        scrolledUnderElevation: 0, // blocca ombra in scroll
+        surfaceTintColor: Colors.transparent, // evita overlay bianco
       ),
       body: GradientBackground(
         child: Column(

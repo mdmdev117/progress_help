@@ -1,9 +1,7 @@
 // file: summary_page.dart
 import 'package:flutter/material.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf/pdf.dart';
-import 'package:printing/printing.dart';
-
+import 'package:progresshelp/gradient_background.dart';
+import 'app_styles.dart';
 
 class SummaryPage extends StatelessWidget {
   final String category;
@@ -11,58 +9,45 @@ class SummaryPage extends StatelessWidget {
 
   const SummaryPage({super.key, required this.category, required this.answers});
 
-  void _generateAndPrintPdf(BuildContext context) async {
-    final pdf = pw.Document();
-
-    pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Text('Richiesta - $category', style: pw.TextStyle(fontSize: 24)),
-              pw.SizedBox(height: 20),
-              ...answers.entries.map(
-                (entry) => pw.Text('${entry.key}: ${entry.value}'),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Riepilogo - $category')),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Risposte:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView(
-                children: answers.entries
-                    .map((entry) => ListTile(
-                          title: Text(entry.key),
-                          subtitle: Text(entry.value),
-                        ))
-                    .toList(),
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text('Riepilogo - $category'),
+      ),
+      body: GradientBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 120),
+              const Text(
+                'Risposte:',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
               ),
-            ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.picture_as_pdf),
-              label: const Text('Genera PDF ed invia'),
-              onPressed: () => _generateAndPrintPdf(context),
-            ),
-          ],
+              const SizedBox(height: 5),
+              Expanded(
+                child: ListView(
+                  children: answers.entries
+                      .map((entry) => ListTile(
+                            title: Text(entry.key, style: const TextStyle(color: Colors.white)),
+                            subtitle: Text(entry.value, style: const TextStyle(color: Colors.white70)),
+                          ))
+                      .toList(),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: AppStyles.elevatedButtonStyle,
+                child: const Text('Torna indietro'),
+              ),
+            ],
+          ),
         ),
       ),
     );

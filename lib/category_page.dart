@@ -22,7 +22,17 @@ class CategoryPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             'Categorie - $selectedProgram',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           backgroundColor: Colors.transparent,
         ),
@@ -36,7 +46,7 @@ class CategoryPage extends StatelessWidget {
                 vertical: 8.0,
               ),
               child: Card(
-                color: Colors.white.withAlpha(5), // <-- trasparenza!
+                color: Colors.white.withAlpha(5), // trasparenza!
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
@@ -53,7 +63,7 @@ class CategoryPage extends StatelessWidget {
                     ),
                   ),
                   trailing: const Icon(
-                    Icons.arrow_forward_ios,
+                    Icons.arrow_forward_ios_rounded,
                     color: Colors.white,
                   ),
                   onTap: () {
