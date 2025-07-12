@@ -1,5 +1,6 @@
 // file: main.dart
 import 'package:flutter/material.dart';
+import 'package:progresshelp/gradient_background.dart';
 import 'category_page.dart';
 
 void main() {
@@ -14,11 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Gestione Presenze',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.blue,
+      //theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.blue),
+      home: GradientBackground(
+        child: CategoryPage(),
       ),
-      home: CategoryPage(),
     );
   }
-} 
+}
