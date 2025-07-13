@@ -1,6 +1,6 @@
 // file: main.dart
 import 'package:flutter/material.dart';
-import 'package:progresshelp/gradient_background.dart';
+import 'package:progresshelp/styles/gradient_background.dart';
 import 'package:progresshelp/program_carousel_page.dart';
 
 void main() {

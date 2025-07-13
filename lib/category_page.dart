@@ -1,21 +1,18 @@
 // file: category_page.dart
 import 'package:flutter/material.dart';
-import 'package:progresshelp/gradient_background.dart';
+import 'package:progresshelp/data/data.dart';
+import 'package:progresshelp/styles/gradient_background.dart';
 import 'question_page.dart';
+
 
 class CategoryPage extends StatelessWidget {
   final String selectedProgram;
-  CategoryPage({super.key, required this.selectedProgram});
-  final List<String> categories = [
-    'Nuova voce presenze',
-    'Modifica cartellino',
-    'Errore gestione presenze',
-    'Report personalizzati',
-    'Altro',
-  ];
+  const CategoryPage({super.key, required this.selectedProgram});
+  
 
   @override
   Widget build(BuildContext context) {
+    final categories = categoriesPerProgram[selectedProgram] ?? [];
     return GradientBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -46,10 +43,10 @@ class CategoryPage extends StatelessWidget {
                 vertical: 8.0,
               ),
               child: Card(
-                color: Colors.white.withAlpha(5), // trasparenza!
+                color: Colors.white.withAlpha(20), // trasparenza!
                 elevation: 4,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(32),
                 ),
 
                 child: ListTile(

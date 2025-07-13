@@ -1,7 +1,7 @@
 // file: summary_page.dart
 import 'package:flutter/material.dart';
-import 'package:progresshelp/gradient_background.dart';
-import 'app_styles.dart';
+import 'package:progresshelp/styles/gradient_background.dart';
+import 'styles/app_styles.dart';
 
 class SummaryPage extends StatelessWidget {
   final String category;

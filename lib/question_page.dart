@@ -1,8 +1,8 @@
 // file: question_page.dart
 import 'package:flutter/material.dart';
-import 'package:progresshelp/gradient_background.dart';
+import 'package:progresshelp/styles/gradient_background.dart';
 import 'summary_page.dart';
-import 'app_styles.dart';
+import 'styles/app_styles.dart';
 
 class QuestionPage extends StatefulWidget {
   final String category;

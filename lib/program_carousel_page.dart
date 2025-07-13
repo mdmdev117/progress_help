@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'category_page.dart';
-import 'package:progresshelp/gradient_background.dart';
+import 'package:progresshelp/styles/gradient_background.dart';
 
 class ProgramCarouselPage extends StatefulWidget {
   const ProgramCarouselPage({super.key});
