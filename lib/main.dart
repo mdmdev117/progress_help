@@ -23,9 +23,7 @@ class MyApp extends StatelessWidget {
           scrolledUnderElevation: 0, // blocca ombra in scroll
         ),
       ),
-      home: GradientBackground(
-        child: ProgramCarouselPage(),
-      ),
+      home: GradientBackground(child: ProgramCarouselPage()),
     );
   }
 }
