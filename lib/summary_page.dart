@@ -1,8 +1,10 @@
 // file: summary_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:progresshelp/styles/gradient_background.dart';
 import 'styles/app_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'question_page.dart'; // Per getQuestionsForCategory
 
 class SummaryPage extends StatelessWidget {
   final String category;
@@ -10,29 +12,61 @@ class SummaryPage extends StatelessWidget {
 
   const SummaryPage({super.key, required this.category, required this.answers});
 
-  Future<void> _sendEmail(BuildContext context) async {
-    final subject = 'Riepilogo - $category';
-    final body = answers.entries.map((e) => '${e.key}: ${e.value}').join('\n');
+  Future _sendEmail(BuildContext context) async {
+    final subject = 'Richiesta di supporto: $category';
 
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: 'your_email@example.com', // <-- opzionale, metti la tua se vuoi
-      queryParameters: {'subject': subject, 'body': body},
-    );
+    // Ottieni le domande originali per questa categoria
+    final questions = getQuestionsForCategory(category);
+
+    // Crea un corpo email ben strutturato
+    String body = '''
+Richiesta di supporto
+Categoria: $category
+
+---
+''';
+
+    for (var entry in answers.entries) {
+      final question = questions.firstWhere(
+        (q) => q.key == entry.key,
+        orElse: () => Question(entry.key, entry.key),
+      );
+      body += '''
+Domanda:
+${question.text}
+
+Risposta:
+${entry.value}
+
+---
+''';
+    }
+
+    final now = DateTime.now();
+    body +=
+        'Inviato da Gestione Presenze il ${now.day}/${now.month}/${now.year} alle ${now.hour}:${now.minute.toString().padLeft(2, '0')}';
+
+    // Codifica soggetto e corpo
+    final encodedSubject = Uri.encodeComponent(subject);
+    final encodedBody = Uri.encodeComponent(body);
+
+    final mailtoLink =
+        'mailto:your_email@example.com'
+        '?subject=$encodedSubject'
+        '&body=$encodedBody';
 
     try {
-      if (await canLaunchUrl(emailUri)) {
-        await launchUrl(emailUri);
+      final uri = Uri.parse(mailtoLink);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
       } else {
-        // Mostra snackbar se nessun client disponibile
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Nessun client email disponibile.')),
           );
         }
       }
-    } catch (e) {
-      // Mostra snackbar in caso di errore
+    } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Errore durante l\'invio dell\'email.')),
@@ -53,33 +87,69 @@ class SummaryPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 120),
-              const Text(
-                'Risposte:',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 60),
               Expanded(
-                child: ListView(
-                  children:
-                      answers.entries
-                          .map(
-                            (entry) => ListTile(
-                              title: Text(
-                                entry.key,
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                              subtitle: Text(
-                                entry.value,
-                                style: const TextStyle(color: Colors.white70),
+                child: ListView.builder(
+                  itemCount: answers.length,
+                  itemBuilder: (context, index) {
+                    final entry = answers.entries.elementAt(index);
+                    final question = getQuestionsForCategory(
+                      category,
+                    ).firstWhere(
+                      (q) => q.key == entry.key,
+                      orElse: () => Question(entry.key, entry.key),
+                    );
+                    return Card(
+                      color: Colors.white.withOpacity(0.1),
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Domanda:',
+                              style: TextStyle(
+                                color: Colors.blue[200],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
                               ),
                             ),
-                          )
-                          .toList(),
+                            const SizedBox(height: 4),
+                            Text(
+                              question.text,
+                              style: TextStyle(
+                                color: Colors.blue[50],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Risposta:',
+                              style: TextStyle(
+                                color: Colors.green[200],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              entry.value,
+                              style: TextStyle(
+                                color: Colors.green[50],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 10),
@@ -87,17 +157,14 @@ class SummaryPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     style: AppStyles.elevatedButtonStyle,
                     child: const Text('Torna indietro'),
                   ),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.email),
                     label: const Text('Invia via email'),
-                    onPressed:
-                        () => _sendEmail(context), // <-- usa il context qui
+                    onPressed: () => _sendEmail(context),
                     style: AppStyles.elevatedButtonStyle,
                   ),
                 ],
